@@ -25,6 +25,8 @@ gMesh::gMesh() {
     scenelight = nullptr;
     colorshader = nullptr;
     textureshader = nullptr;
+	bbminx = 0.0f, bbminy = 0.0f, bbminz = 0.0f;
+	bbmaxx = 0.0f, bbmaxy = 0.0f, bbmaxz = 0.0f;
 }
 
 gMesh::gMesh(std::vector<gVertex> vertices, std::vector<unsigned int> indices, std::vector<gTexture> textures) {
@@ -226,5 +228,24 @@ int gMesh::getIndicesNum() {
 
 gVbo* gMesh::getVbo() {
 	return &vbo;
+}
+
+gBoundingBox gMesh::getBoundingBox() {
+	bbminx = 0.0f, bbminy = 0.0f, bbminz = 0.0f;
+	bbmaxx = 0.0f, bbmaxy = 0.0f, bbmaxz = 0.0f;
+
+	for (int i = 0; i< vertices.size(); i++) {
+		gVertex v = vertices[i];
+		glm::vec3 vpos = glm::vec3(localtransformationmatrix * glm::vec4(v.position, 1.0));
+
+		bbminx = std::min(bbminx, vpos.x);
+		bbminy = std::min(bbminy, vpos.y);
+		bbminz = std::min(bbminz, vpos.z);
+		bbmaxx = std::max(bbmaxx, vpos.x);
+		bbmaxy = std::max(bbmaxy, vpos.y);
+		bbmaxz = std::max(bbmaxz, vpos.z);
+	}
+
+	return gBoundingBox(bbminx, bbminy, bbminz, bbmaxx, bbmaxy, bbmaxz);
 }
 

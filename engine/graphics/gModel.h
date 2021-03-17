@@ -40,6 +40,7 @@ public:
 
 	int getMeshNum();
 	gSkinnedMesh getMesh(int meshNo);
+	gBoundingBox getBoundingBox();
 
 	void move(float dx, float dy, float dz);
 	void move(const glm::vec3 dv);
@@ -103,6 +104,8 @@ private:
 	void prepareVertexAnimationData();
 	bool isvertexanimated;
 	bool isvertexanimationstoredonvram;
+
+    float bbminx, bbminy, bbminz, bbmaxx, bbmaxy, bbmaxz;
 };
 
 #endif /* ENGINE_GRAPHICS_GMODEL_H_ */
